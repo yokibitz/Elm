@@ -14,7 +14,11 @@ var _user$project$Main$viewValidation = function (model) {
 					_0: {ctor: '_Tuple2', _0: 'color', _1: color},
 					_1: {ctor: '[]'}
 				}),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$hidden(!model.validate),
+				_1: {ctor: '[]'}
+			}
 		},
 		{
 			ctor: '::',
@@ -38,17 +42,22 @@ var _user$project$Main$update = F2(
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{passwordAgain: _p1._0});
-			default:
+			case 'Age':
 				return _elm_lang$core$Native_Utils.update(
 					model,
 					{age: _p1._0});
+			default:
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{validate: true});
 		}
 	});
-var _user$project$Main$Model = F4(
-	function (a, b, c, d) {
-		return {name: a, password: b, passwordAgain: c, age: d};
+var _user$project$Main$Model = F5(
+	function (a, b, c, d, e) {
+		return {name: a, password: b, passwordAgain: c, age: d, validate: e};
 	});
-var _user$project$Main$model = A4(_user$project$Main$Model, '', '', '', '');
+var _user$project$Main$model = A5(_user$project$Main$Model, '', '', '', '', false);
+var _user$project$Main$Submit = {ctor: 'Submit'};
 var _user$project$Main$Age = function (a) {
 	return {ctor: 'Age', _0: a};
 };
@@ -140,7 +149,29 @@ var _user$project$Main$view = function (model) {
 						_1: {
 							ctor: '::',
 							_0: _user$project$Main$viewValidation(model),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Submit),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Submit'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
@@ -149,3 +180,18 @@ var _user$project$Main$view = function (model) {
 };
 var _user$project$Main$main = _elm_lang$html$Html$beginnerProgram(
 	{model: _user$project$Main$model, view: _user$project$Main$view, update: _user$project$Main$update})();
+var _user$project$Main$CharacterVariationNotSatisfied = function (a) {
+	return {ctor: 'CharacterVariationNotSatisfied', _0: a};
+};
+var _user$project$Main$MinimumLengthNotSatisfied = function (a) {
+	return {ctor: 'MinimumLengthNotSatisfied', _0: a};
+};
+var _user$project$Main$AgeNotANumber = function (a) {
+	return {ctor: 'AgeNotANumber', _0: a};
+};
+var _user$project$Main$PasswordsDontMatch = function (a) {
+	return {ctor: 'PasswordsDontMatch', _0: a};
+};
+var _user$project$Main$OK = function (a) {
+	return {ctor: 'OK', _0: a};
+};
