@@ -54,11 +54,6 @@ update msg model =
 
 
 
--- Submit ->
---   viewValidation model
---   model
-
-
 view : Model -> Html Msg
 view model =
     div []
@@ -79,21 +74,6 @@ type ValidationResult
     | CharacterVariationNotSatisfied String
 
 
-
--- inputValidation : Model -> ( Model, ValidationResult )
--- inputValidation model =
---     if not <| String.all isDigit model.age then
---         ( { model | isValid = False }, AgeNotANumber "age must be a number" )
---     else if model.password /= model.passwordAgain then
---         ( { model | isValid = False }, PasswordsDontMatch "passwords don't match" )
---     else if String.length model.password < 8 then
---         ( { model | isValid = False }, MinimumLengthNotSatisfied "password must be at least 8 characters" )
---     else if not (String.any isLower model.password && String.any isUpper model.password && String.any isDigit model.password) then
---         ( { model | isValid = False }, CharacterVariationNotSatisfied "password must be contain upper case, lower case, and numeric characters" )
---     else
---         ( { model | isValid = True }, OK "OK" )
-
-
 viewValidation : Model -> Html msg
 viewValidation model =
     let
@@ -104,9 +84,17 @@ viewValidation model =
                 ( "red", "passwords don't match" )
             else if String.length model.password < 8 then
                 ( "red", "password must be at least 8 characters" )
-            else if not (String.any isLower model.password && String.any isUpper model.password && String.any isDigit model.password) then
+            else if not (characterVariationValidation [isLower, isUpper, isDigit] model.password) then
                 ( "red", "password must be contain upper case, lower case, and numeric characters" )
             else
                 ( "green", "OK" )
     in
     div [ style [ ( "color", color ) ], hidden <| not model.validate ] [ text message ]
+
+characterVariationValidation : List (Char -> Bool) -> String -> Bool
+characterVariationValidation predicates stringToValidate = 
+    case predicates of
+        [] ->
+            True
+        predicates ->
+            List.foldl (\f -> (&&) <| f stringToValidate) True <| List.map String.any predicates

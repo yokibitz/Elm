@@ -1,9 +1,43 @@
+var _user$project$Main$characterVariationValidation = F2(
+	function (predicates, stringToValidate) {
+		var _p0 = predicates;
+		if (_p0.ctor === '[]') {
+			return true;
+		} else {
+			return A3(
+				_elm_lang$core$List$foldl,
+				function (f) {
+					return F2(
+						function (x, y) {
+							return x && y;
+						})(
+						f(stringToValidate));
+				},
+				true,
+				A2(_elm_lang$core$List$map, _elm_lang$core$String$any, _p0));
+		}
+	});
 var _user$project$Main$viewValidation = function (model) {
-	var _p0 = (!A2(_elm_lang$core$String$all, _elm_lang$core$Char$isDigit, model.age)) ? {ctor: '_Tuple2', _0: 'red', _1: 'age must be a number'} : ((!_elm_lang$core$Native_Utils.eq(model.password, model.passwordAgain)) ? {ctor: '_Tuple2', _0: 'red', _1: 'passwords don\'t match'} : ((_elm_lang$core$Native_Utils.cmp(
+	var _p1 = (!A2(_elm_lang$core$String$all, _elm_lang$core$Char$isDigit, model.age)) ? {ctor: '_Tuple2', _0: 'red', _1: 'age must be a number'} : ((!_elm_lang$core$Native_Utils.eq(model.password, model.passwordAgain)) ? {ctor: '_Tuple2', _0: 'red', _1: 'passwords don\'t match'} : ((_elm_lang$core$Native_Utils.cmp(
 		_elm_lang$core$String$length(model.password),
-		8) < 0) ? {ctor: '_Tuple2', _0: 'red', _1: 'password must be at least 8 characters'} : ((!(A2(_elm_lang$core$String$any, _elm_lang$core$Char$isLower, model.password) && (A2(_elm_lang$core$String$any, _elm_lang$core$Char$isUpper, model.password) && A2(_elm_lang$core$String$any, _elm_lang$core$Char$isDigit, model.password)))) ? {ctor: '_Tuple2', _0: 'red', _1: 'password must be contain upper case, lower case, and numeric characters'} : {ctor: '_Tuple2', _0: 'green', _1: 'OK'})));
-	var color = _p0._0;
-	var message = _p0._1;
+		8) < 0) ? {ctor: '_Tuple2', _0: 'red', _1: 'password must be at least 8 characters'} : ((!A2(
+		_user$project$Main$characterVariationValidation,
+		{
+			ctor: '::',
+			_0: _elm_lang$core$Char$isLower,
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$core$Char$isUpper,
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Char$isDigit,
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		model.password)) ? {ctor: '_Tuple2', _0: 'red', _1: 'password must be contain upper case, lower case, and numeric characters'} : {ctor: '_Tuple2', _0: 'green', _1: 'OK'})));
+	var color = _p1._0;
+	var message = _p1._1;
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -28,24 +62,24 @@ var _user$project$Main$viewValidation = function (model) {
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p1 = msg;
-		switch (_p1.ctor) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
 			case 'Name':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{name: _p1._0});
+					{name: _p2._0});
 			case 'Password':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{password: _p1._0});
+					{password: _p2._0});
 			case 'PasswordAgain':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{passwordAgain: _p1._0});
+					{passwordAgain: _p2._0});
 			case 'Age':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{age: _p1._0});
+					{age: _p2._0});
 			default:
 				return _elm_lang$core$Native_Utils.update(
 					model,
