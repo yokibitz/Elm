@@ -1,6 +1,8 @@
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
+var _user$project$Main$dieGenerator = A2(_elm_lang$core$Random$int, 1, 6);
+var _user$project$Main$diePairGenerator = A2(_elm_lang$core$Random$pair, _user$project$Main$dieGenerator, _user$project$Main$dieGenerator);
 var _user$project$Main$imageDict = _elm_lang$core$Dict$fromList(
 	{
 		ctor: '::',
@@ -27,12 +29,13 @@ var _user$project$Main$imageDict = _elm_lang$core$Dict$fromList(
 			}
 		}
 	});
-var _user$project$Main$Model = function (a) {
-	return {dieFace: a};
-};
+var _user$project$Main$Model = F2(
+	function (a, b) {
+		return {dieFace1: a, dieFace2: b};
+	});
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
-	_0: _user$project$Main$Model(1),
+	_0: A2(_user$project$Main$Model, 1, 1),
 	_1: _elm_lang$core$Platform_Cmd$none
 };
 var _user$project$Main$NewFace = function (a) {
@@ -45,15 +48,12 @@ var _user$project$Main$update = F2(
 			return {
 				ctor: '_Tuple2',
 				_0: model,
-				_1: A2(
-					_elm_lang$core$Random$generate,
-					_user$project$Main$NewFace,
-					A2(_elm_lang$core$Random$int, 1, 6))
+				_1: A2(_elm_lang$core$Random$generate, _user$project$Main$NewFace, _user$project$Main$diePairGenerator)
 			};
 		} else {
 			return {
 				ctor: '_Tuple2',
-				_0: _user$project$Main$Model(_p0._0),
+				_0: A2(_user$project$Main$Model, _p0._0._0, _p0._0._1),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		}
@@ -71,24 +71,79 @@ var _user$project$Main$view = function (model) {
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html$text(
-						_elm_lang$core$Basics$toString(model.dieFace)),
+						_elm_lang$core$Basics$toString(model.dieFace1)),
 					_1: {ctor: '[]'}
 				}),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$button,
+					_elm_lang$html$Html$img,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Roll),
+						_0: _elm_lang$html$Html_Attributes$src(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'..\\images\\',
+								A2(
+									_elm_lang$core$Maybe$withDefault,
+									'',
+									A2(_elm_lang$core$Dict$get, model.dieFace1, _user$project$Main$imageDict)))),
 						_1: {ctor: '[]'}
 					},
-					{
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h1,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(model.dieFace2)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('Roll'),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
+						_0: A2(
+							_elm_lang$html$Html$img,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$src(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'..\\images\\',
+										A2(
+											_elm_lang$core$Maybe$withDefault,
+											'',
+											A2(_elm_lang$core$Dict$get, model.dieFace2, _user$project$Main$imageDict)))),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Roll),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Roll'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
 			}
 		});
 };
