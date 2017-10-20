@@ -1,2 +1,4 @@
 elm-stuff/build-artifacts/0.18.0/user/project/1.0.0/Main.elmi
 elm-stuff/build-artifacts/0.18.0/user/project/1.0.0/Main.elmo
+*.elmi
+*.elmo
