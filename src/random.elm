@@ -60,9 +60,9 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text (toString model.dieFace1) ]
-        , img [ src <| "..\\images\\" ++ (Maybe.withDefault "" <| Dict.get model.dieFace1 imageDict) ] []
+        , img [ src <| "images\\" ++ (Maybe.withDefault "" <| Dict.get model.dieFace1 imageDict) ] []
         , h1 [] [ text (toString model.dieFace2) ]
-        , img [ src <| "..\\images\\" ++ (Maybe.withDefault "" <| Dict.get model.dieFace2 imageDict) ] []
+        , img [ src <| "images\\" ++ (Maybe.withDefault "" <| Dict.get model.dieFace2 imageDict) ] []
         , div []
             [ button [ onClick Roll ] [ text "Roll" ]
             ]
