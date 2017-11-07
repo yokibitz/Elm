@@ -1,3 +1,5 @@
 *.elmi
 *.elmo
 elm-stuff
+main.js
+index.html
