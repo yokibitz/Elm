@@ -1,6 +1,6 @@
 module Main exposing (..)
 
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, button, div, label, text)
 import Html.Events exposing (onClick)
 import Time exposing (Time, minute, second)
 
@@ -15,15 +15,16 @@ main =
 
 
 type alias Model =
-    { remainingTime : Time
-    , isRunning : Bool
+    { m : Int
+    , s : Int
+    , minutes : String
+    , seconds : String
     }
 
 
 type Msg
     = Tick Time
     | Reset
-    | Toggle
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -31,37 +32,37 @@ update msg model =
     case msg of
         Tick _ ->
             let
-                newTime =
-                    model.remainingTime - (1 * second)
+                newSecond =
+                    if model.s - 1 == -1 then
+                        59
+                    else
+                        model.s - 1
+
+                newMinute =
+                    if newSecond == 59 then
+                        model.m - 1
+                    else
+                        model.m
             in
-            if newTime <= 0 then
-                ( { model | remainingTime = 0, isRunning = False }, Cmd.none )
-            else
-                ( { model | remainingTime = newTime }, Cmd.none )
+            ( { model | m = newMinute, s = newSecond, minutes = toString newMinute, seconds = toString newSecond }, Cmd.none )
 
         Reset ->
             init
 
-        Toggle ->
-            ( { model | isRunning = not model.isRunning }, Cmd.none )
-
 
 init : ( Model, Cmd msg )
 init =
-    ( Model (25 * minute) True, Cmd.none )
+    ( Model 1 30 "1" "30", Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    if model.isRunning then
-        Time.every second Tick
-    else
-        Sub.none
+    Time.every second Tick
 
 
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text (toString <| Time.inMinutes model.remainingTime) ]
+        [ label [] [ text <| model.minutes ++ ":" ++ model.seconds ]
         , button [ onClick Reset ] [ text "Reset" ]
         ]
