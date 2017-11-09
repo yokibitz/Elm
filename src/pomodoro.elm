@@ -5,6 +5,7 @@ import Html.Events exposing (onClick)
 import Time exposing (Time, minute, second)
 
 
+main : Program Never Model Msg
 main =
     Html.program
         { init = init
@@ -19,6 +20,7 @@ type alias Model =
     , s : Int
     , minutes : String
     , seconds : String
+    , isRunning : Bool
     }
 
 
@@ -31,20 +33,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick _ ->
-            let
-                newSecond =
-                    if model.s - 1 == -1 then
-                        59
-                    else
-                        model.s - 1
-
-                newMinute =
-                    if newSecond == 59 then
-                        model.m - 1
-                    else
-                        model.m
-            in
-            ( { model | m = newMinute, s = newSecond, minutes = toString newMinute, seconds = toString newSecond }, Cmd.none )
+            ( newModel model, Cmd.none )
 
         Reset ->
             init
@@ -52,17 +41,49 @@ update msg model =
 
 init : ( Model, Cmd msg )
 init =
-    ( Model 1 30 "1" "30", Cmd.none )
+    ( Model 0 10 "00" "10" True, Cmd.none )
+
+
+newModel : Model -> Model
+newModel model =
+    let
+        newSecond =
+            if model.s - 1 == -1 then
+                59
+            else
+                model.s - 1
+
+        newMinute =
+            if newSecond == 59 then
+                model.m - 1
+            else
+                model.m
+
+        isRunning =
+            newMinute + newSecond > 0
+    in
+    Model newMinute newSecond (padLeftWithZero newMinute) (padLeftWithZero newSecond) isRunning
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Time.every second Tick
+    if model.isRunning then
+        Time.every second Tick
+    else
+        Sub.none
 
 
 view : Model -> Html Msg
 view model =
     div []
         [ label [] [ text <| model.minutes ++ ":" ++ model.seconds ]
-        , button [ onClick Reset ] [ text "Reset" ]
+        , button [ onClick Reset ] [ text "Restart" ]
         ]
+
+
+padLeftWithZero : Int -> String
+padLeftWithZero timeComponent =
+    if timeComponent < 10 then
+        "0" ++ toString timeComponent
+    else
+        toString timeComponent
